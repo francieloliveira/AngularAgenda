@@ -1,0 +1,42 @@
+<div>
+  <div *ngIf="contatos && contatos.content && contatos.content.length > 0">
+    <h2>Lista de Contatos</h2>
+
+    <div *ngIf="mensagemAlerta" class="{{getTipoAlerta()}}">
+      {{ mensagemAlerta }}
+    </div>
+
+    <div>
+      <label for="nomeBusca">Buscar por Nome:</label>
+      <input type="text" id="nomeBusca" [(ngModel)]="termoBusca" />
+      <button (click)="buscarContatosPorNome()">Buscar</button>
+    </div>
+
+    <ul>
+      <li *ngFor="let contato of contatos.content">
+        <div>
+          <strong>{{ contato["nome"] }}</strong>
+          <p>E-mail: {{ contato["email"] }}</p>
+          <p>Telefone: {{ contato["telefone"] }}</p>
+          <a [routerLink]="['/detalhes-contato', contato['id']]">Detalhes</a>
+          <br/>
+          <br/>
+        </div>
+      </li>
+    </ul>
+    <br/>
+    <br/>
+    <!-- Paginação -->
+    <div *ngIf="contatos['totalPages'] > 1">
+      <span>Página {{ contatos.number + 1 }} de {{ contatos.totalPages }}</span>
+      <button [disabled]="contatos.first" (click)="carregarContatosPorPagina(contatos.number - 1)">Anterior</button>
+      <button [disabled]="contatos.last" (click)="carregarContatosPorPagina(contatos.number + 1)">Próxima</button>
+    </div>
+  </div>
+  <br/>
+  <br/>
+  <div *ngIf="contatos && contatos.content && contatos.content.length === 0">
+    <p>Nenhum contato encontrado.</p>
+  </div>
+  <button [routerLink]="['/adicionar-contato']">Adicionar Novo Contato</button>
+</div>

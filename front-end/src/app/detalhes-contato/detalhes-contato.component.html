@@ -1,0 +1,50 @@
+<div *ngIf="contato">
+  <h2>Detalhes do Contato</h2>
+
+  <div *ngIf="mensagemAlerta" class="{{getTipoAlerta()}}">
+    {{ mensagemAlerta }}
+  </div>
+
+  <form>
+    <label for="nome">Nome:</label>
+    <input [(ngModel)]="contato['nome']" id="nome" name="nome" placeholder="Nome">
+
+    <label for="email">Email:</label>
+    <input [(ngModel)]="contato.email" type="email" id="email" name="email" placeholder="Email">
+
+    <label for="telefone">Telefone:</label>
+    <input [(ngModel)]="contato['telefone']" type="tel" id="telefone" name="telefone" placeholder="Telefone">
+
+    <label for="dataNascimento">Data de Nascimento:</label>
+    <input [(ngModel)]="contato['dataNascimento']" type="date" id="dataNascimento" name="dataNascimento" placeholder="Data de Nascimento">
+
+    <label for="cpf">CPF:</label>
+    <input [(ngModel)]="contato['cpf']" id="cpf" name="cpf" placeholder="CPF">
+
+    <label for="cnpj">CNPJ:</label>
+    <input [(ngModel)]="contato['cnpj']" id="cnpj" name="cnpj" placeholder="CNPJ">
+
+    <label for="logradouro">Endereço:</label>
+    <input [(ngModel)]="contato['logradouro']" id="logradouro" name="logradouro" placeholder="Logradouro">
+
+    <label for="numero">Número:</label>
+    <input [(ngModel)]="contato['numero']" id="numero" name="numero" placeholder="Número">
+
+    <label for="complemento">Complemento:</label>
+    <input [(ngModel)]="contato['complemento']" id="complemento" name="complemento" placeholder="Complemento">
+
+    <label for="bairro">Bairro:</label>
+    <input [(ngModel)]="contato['bairro']" id="bairro" name="bairro" placeholder="Bairro">
+
+    <label for="localidade">Localidade:</label>
+    <input [(ngModel)]="contato['localidade']" id="localidade" name="localidade" placeholder="Localidade">
+
+    <label for="uf">UF:</label>
+    <input [(ngModel)]="contato['uf']" id="uf" name="uf" placeholder="UF">
+    <br/>
+    <br/>
+    <button (click)="atualizarContato()">Salvar</button>
+    <button (click)="excluirContato()">Excluir</button>
+    <button [routerLink]="'/lista-contatos'">Voltar para Lista</button>
+  </form>
+</div>
