@@ -40,16 +40,16 @@ public class AgendaController {
     public ResponseEntity<Object> createContact(@RequestBody @Valid AgendaDto agendaDto) {
         try {
             if (agendaDto.getCpf() == null && agendaDto.getCnpj() == null) {
-                return ResponseEntity.badRequest().body("Erro: CPF ou CNPJ é obrigatório");
+                return ResponseEntity.badRequest().body("CPF ou CNPJ é obrigatório");
             }
 
             // Validação de CPF
             if (agendaDto.getCpf() != null) {
                 if (agendaService.existsByCpf(agendaDto.getCpf())) {
                     if (!ValidatorCpfCnpj.isValidCPF(agendaDto.getCpf())) {
-                        return ResponseEntity.badRequest().body("Erro: CPF inválido");
+                        return ResponseEntity.badRequest().body("CPF inválido");
                     }
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflito: O CPF já existe");
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body("O CPF já existe");
                 }
             }
 
@@ -57,15 +57,15 @@ public class AgendaController {
             if (agendaDto.getCnpj() != null) {
                 if (agendaService.existsByCnpj(agendaDto.getCnpj())) {
                     if (!ValidatorCpfCnpj.isValidCNPJ(agendaDto.getCnpj())) {
-                        return ResponseEntity.badRequest().body("Erro: CNPJ inválido");
+                        return ResponseEntity.badRequest().body("CNPJ inválido");
                     }
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflito: O CNPJ já existe");
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body("O CNPJ já existe");
                 }
             }
 
             // Validação da Data de Nascimento
             if (agendaDto.getDataNascimento() == null) {
-                return ResponseEntity.badRequest().body("Erro: Data de nascimento é obrigatória");
+                return ResponseEntity.badRequest().body("Data de nascimento é obrigatória");
             }
 
             var agendaModel = new AgendaModel();
@@ -101,7 +101,7 @@ public class AgendaController {
     public ResponseEntity<Object> getContactById(@PathVariable(value = "id") UUID id) {
         Optional<AgendaModel> agendaModelOptional = agendaService.findById(id);
         if (!agendaModelOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item não existe!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contato não existe!");
         }
 
         AgendaModel agendaModel = agendaModelOptional.get();
@@ -143,7 +143,7 @@ public class AgendaController {
     public ResponseEntity<Object> updateContact(@PathVariable(value = "id") UUID id, @RequestBody @Valid AgendaDto agendaDto) {
         Optional<AgendaModel> agendaModelOptional = agendaService.findById(id);
         if (!agendaModelOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item não existe.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contato não existe.");
         }
         var agendaModel = agendaModelOptional.get();
         BeanUtils.copyProperties(agendaDto, agendaModel);
@@ -160,9 +160,9 @@ public class AgendaController {
     public ResponseEntity<Object> deleteContact(@PathVariable(value = "id") UUID id) {
         Optional<AgendaModel> agendaModelOptional = agendaService.findById(id);
         if (!agendaModelOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item não existe.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contato não existe.");
         }
         agendaService.deleteItem(agendaModelOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Item excluído com sucesso!");
+        return ResponseEntity.status(HttpStatus.OK).body("Contato excluído com sucesso!");
     }
 }

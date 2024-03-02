@@ -4,6 +4,11 @@ public class ValidatorCpfCnpj {
     private ValidatorCpfCnpj() {
     }
 
+    /**
+     * Método para verificação da validade do CPF
+     * @param cpf
+     * @return
+     */
     public static boolean isValidCPF(String cpf) {
         // Remove caracteres não numéricos
         cpf = cpf.replaceAll("[^0-9]", "");
@@ -33,6 +38,11 @@ public class ValidatorCpfCnpj {
         return Character.getNumericValue(cpf.charAt(9)) == firstDigit && Character.getNumericValue(cpf.charAt(10)) == secondDigit;
     }
 
+    /**
+     * Método para a verificação da validade do cnpj
+     * @param cnpj
+     * @return
+     */
     public static boolean isValidCNPJ(String cnpj) {
         // Remove caracteres não numéricos
         cnpj = cnpj.replaceAll("[^0-9]", "");

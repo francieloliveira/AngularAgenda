@@ -5,6 +5,21 @@ import {DetalhesContatoComponent} from "./detalhes-contato/detalhes-contato.comp
 import {AdicionarContatoComponent} from "./adicionar-contato/adicionar-contato.component";
 
 
+/**
+ * Módulo de roteamento para a aplicação.
+ *
+ * Este módulo define as rotas da aplicação Angular.
+ *
+ * @example
+ * // Importação no módulo principal
+ * import { AppRoutingModule } from './app-routing.module';
+ *
+ * @NgModule({
+ *   imports: [AppRoutingModule],
+ *   exports: [RouterModule]
+ * })
+ * export class AppModule { }
+ */
 const routes: Routes = [
   { path: 'lista-contatos', component: ListaContatosComponent },
   { path: 'detalhes-contato/:id', component: DetalhesContatoComponent },
@@ -13,6 +28,9 @@ const routes: Routes = [
   // { path: '', redirectTo: '/lista-contatos', pathMatch: 'full' },
 ];
 
+/**
+ * @NgModule - Decorador que marca uma classe como um módulo Angular.
+ */
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

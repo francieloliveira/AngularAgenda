@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AgendaService } from '../services/agenda.service';
 import {PaginaContatos} from "./pagina-contatos";
 
+/**
+ * Componente para exibir a lista de contatos, carregar contatos por página e buscar contatos por nome.
+ */
 @Component({
   selector: 'app-lista-contatos',
   templateUrl: './lista-contatos.component.html',
@@ -12,12 +15,22 @@ export class ListaContatosComponent implements OnInit {
   mensagemAlerta: string | null = null;
   termoBusca: string = '';
 
+  /**
+   * Construtor da classe ListaContatosComponent.
+   * @param agendaService Serviço para interação com a agenda.
+   */
   constructor(private agendaService: AgendaService) { }
 
+  /**
+   * Método chamado quando o componente é inicializado.
+   */
   ngOnInit(): void {
     this.carregarContatos();
   }
 
+  /**
+   * Carrega todos os contatos.
+   */
   carregarContatos(): void {
     this.agendaService.getContacts().subscribe(
       (contatos: Object) => {
@@ -30,6 +43,10 @@ export class ListaContatosComponent implements OnInit {
     );
   }
 
+  /**
+   * Carrega contatos com base no número da página.
+   * @param numeroPagina Número da página a ser carregada.
+   */
   carregarContatosPorPagina(numeroPagina: number): void {
     this.agendaService.getContactsByPage(numeroPagina, 1).subscribe(
       (paginaContatos: PaginaContatos) => {
@@ -42,6 +59,9 @@ export class ListaContatosComponent implements OnInit {
     );
   }
 
+  /**
+   * Busca contatos por nome.
+   */
   buscarContatosPorNome(): void {
     this.agendaService.searchContactsByName(this.termoBusca).subscribe(
       (contatos: Object) => {
@@ -54,6 +74,10 @@ export class ListaContatosComponent implements OnInit {
     );
   }
 
+  /**
+   * Obtém o tipo de alerta com base na mensagem de alerta.
+   * @returns Tipo de alerta: 'success' para sucesso, 'danger' para erro.
+   */
   getTipoAlerta(): string {
     if (this.mensagemAlerta && this.mensagemAlerta.includes('sucesso')) {
       this.hideAlertAfterTimeout();
@@ -64,10 +88,13 @@ export class ListaContatosComponent implements OnInit {
     }
   }
 
+  /**
+   * Oculta a mensagem de alerta após um período de tempo. (10000 milissegundos = 10 segundos)
+   */
   hideAlertAfterTimeout(): void {
     setTimeout(() => {
       this.mensagemAlerta = null;
-    }, 10000); // 10000 milissegundos = 10 segundos
+    }, 10000);
   }
 
 }

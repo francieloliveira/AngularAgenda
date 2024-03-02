@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {AgendaService} from "../services/agenda.service";
 import {ActivatedRoute, Router} from "@angular/router";
 
+/**
+ * Componente para exibir detalhes, atualizar e excluir um contato da agenda.
+ */
 @Component({
   selector: 'app-detalhes-contato',
   templateUrl: './detalhes-contato.component.html',
@@ -11,12 +14,24 @@ export class DetalhesContatoComponent implements OnInit {
   contato: any = [];
   mensagemAlerta: string | null = null;
 
+  /**
+   * Construtor da classe DetalhesContatoComponent.
+   * @param route Serviço para obter informações da rota ativa.
+   * @param agendaService Serviço para interação com a agenda.
+   * @param router Serviço para navegação.
+   */
   constructor(private route: ActivatedRoute, private agendaService: AgendaService, private router: Router) { }
 
+  /**
+   * Método chamado quando o componente é inicializado. Carrega os detalhes do contato.
+   */
   ngOnInit(): void {
     this.carregarDetalhesContato();
   }
 
+  /**
+   * Carrega os detalhes do contato com base no ID fornecido na rota.
+   */
   carregarDetalhesContato(): void {
     const id = this.route.snapshot.paramMap.get('id');
     console.log('ID: ',id);
@@ -27,23 +42,29 @@ export class DetalhesContatoComponent implements OnInit {
     }
   }
 
+  /**
+   * Atualiza as informações do contato na agenda.
+   */
   atualizarContato(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id && this.contato) {
       this.agendaService.updateContact(id, this.contato).subscribe(
         (response) => {
           if (!response.id.isNaN)
-            this.mensagemAlerta = 'Contato atualizado com sucesso!'; // Define a variável de mensagem
+            this.mensagemAlerta = 'Contato atualizado com sucesso!';
           console.log('Contato atualizado com sucesso!');
         },
         (error) => {
-          this.mensagemAlerta = error.message; // Define a variável de mensagem
+          this.mensagemAlerta = error.message;
           console.error('Erro ao salvar contato:', error);
         }
       );
     }
   }
 
+  /**
+   * Exclui o contato da agenda.
+   */
   excluirContato(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -63,6 +84,10 @@ export class DetalhesContatoComponent implements OnInit {
     }
   }
 
+  /**
+   * Obtém o tipo de alerta com base na mensagem de alerta.
+   * @returns Tipo de alerta: 'success' para sucesso, 'danger' para erro.
+   */
   getTipoAlerta(): string {
     if (this.mensagemAlerta && this.mensagemAlerta.includes('sucesso')) {
       this.hideAlertAfterTimeout();
@@ -73,12 +98,18 @@ export class DetalhesContatoComponent implements OnInit {
     }
   }
 
+  /**
+   * Oculta a mensagem de alerta após um período de tempo. (10000 milissegundos = 10 segundos)
+   */
   hideAlertAfterTimeout(): void {
     setTimeout(() => {
       this.mensagemAlerta = null;
-    }, 10000); // 10000 milissegundos = 10 segundos
+    }, 10000);
   }
 
+  /**
+   * Reseta os campos do contato para os valores padrão.
+   */
   resetContactFields(): void {
     this.contato = {
       nome: '',
