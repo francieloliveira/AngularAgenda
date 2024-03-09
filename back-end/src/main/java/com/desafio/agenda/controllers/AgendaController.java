@@ -2,13 +2,16 @@ package com.desafio.agenda.controllers;
 
 import com.desafio.agenda.dtos.AgendaDto;
 import com.desafio.agenda.services.AgendaService;
+import com.desafio.agenda.services.EmailNotificationService;
 import com.desafio.agenda.utils.ValidatorCpfCnpj;
 import jakarta.validation.Valid;
 import com.desafio.agenda.models.AgendaModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -25,6 +28,8 @@ import java.util.UUID;
 public class AgendaController {
 
     final AgendaService agendaService;
+    @Autowired
+    private EmailNotificationService emailNotificationService;
     private static final Logger logger = LoggerFactory.getLogger(AgendaController.class);
 
     public AgendaController(AgendaService agendaService) {
@@ -70,7 +75,11 @@ public class AgendaController {
 
             var agendaModel = new AgendaModel();
             BeanUtils.copyProperties(agendaDto, agendaModel);
-            return ResponseEntity.status(HttpStatus.CREATED).body(agendaService.save(agendaModel));
+
+            // Envio de e-mail
+            AgendaModel savedContact = agendaService.save(agendaModel);
+            emailNotificationService.sendEmailNotification(savedContact);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedContact);
 
         } catch (Exception e) {
             logger.error("Erro inesperado ao salvar contato", e);
@@ -78,13 +87,13 @@ public class AgendaController {
         }
     }
 
-    /**
-     * Recupera tdo o conteúdo paginado da agenda.
-     * @param pageable
-     * @return ResponseEntity
-     */
     @GetMapping
-    public ResponseEntity<Object> getPaginatedContacts(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Object> getPaginatedContacts(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "1") int size,
+            @RequestParam(value = "sort", defaultValue = "id") String sort,
+            @RequestParam(value = "direction", defaultValue = "ASC") Sort.Direction direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort));
         Page<AgendaModel> agendaPage = agendaService.findAll(pageable);
         if (agendaPage.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("A agenda está vazia.");

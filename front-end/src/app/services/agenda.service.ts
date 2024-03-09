@@ -23,12 +23,15 @@ export class AgendaService {
   constructor(private http: HttpClient) { }
 
   /**
-   * Obtém todos os contatos da agenda.
-   * @returns Observable contendo a lista de contatos.
+   * Obtém uma página de contatos com base no número da página e tamanho da página.
+   * @param page Número da página desejada.
+   * @param size Tamanho da página desejada.
+   * @returns Observable contendo a página de contatos.
    */
-  getContacts(): Observable<any> {
-    const url = `${this.apiUrl}`;
-    return this.http.get(url).pipe(
+
+  getContacts(page: number, size: number): Observable<PaginaContatos> {
+    const url = `${this.apiUrl}?page=${page - 1}&size=${size}`;
+    return this.http.get<PaginaContatos>(url).pipe(
       catchError((error) => this.handleError(error))
     );
   }

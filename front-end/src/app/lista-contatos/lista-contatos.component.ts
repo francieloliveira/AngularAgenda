@@ -25,14 +25,14 @@ export class ListaContatosComponent implements OnInit {
    * Método chamado quando o componente é inicializado.
    */
   ngOnInit(): void {
-    this.carregarContatos();
+    this.carregarContatos(10);
   }
 
   /**
    * Carrega todos os contatos.
    */
-  carregarContatos(): void {
-    this.agendaService.getContacts().subscribe(
+  carregarContatos(tamanhoPagina : number): void {
+    this.agendaService.getContacts(1, tamanhoPagina).subscribe(
       (contatos: Object) => {
         this.contatos = contatos;
       },
@@ -48,7 +48,7 @@ export class ListaContatosComponent implements OnInit {
    * @param numeroPagina Número da página a ser carregada.
    */
   carregarContatosPorPagina(numeroPagina: number): void {
-    this.agendaService.getContactsByPage(numeroPagina, 1).subscribe(
+    this.agendaService.getContactsByPage(numeroPagina, 10).subscribe(
       (paginaContatos: PaginaContatos) => {
         this.contatos = paginaContatos;
       },
