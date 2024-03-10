@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {AgendaService} from "../services/agenda.service";
+import {CepService} from "../services/cep.service";
 
 /**
  * Componente para adicionar um novo contato à agenda.
@@ -13,15 +14,18 @@ import {AgendaService} from "../services/agenda.service";
 export class AdicionarContatoComponent implements OnInit {
   novoContato: any = {};
   mensagemAlerta: string | null = null;
-
+  cep: string = '';
+  endereco: any;
 
   /**
    * Construtor da classe AdicionarContatoComponent.
    * @param agendaService
    * @param router
+   * @param cepService
    */
   constructor(private agendaService: AgendaService,
-              private router: Router) { }
+              private router: Router,
+              private cepService: CepService) { }
 
   /**
    * Método chamado quando o componente é inicializado.
@@ -69,4 +73,24 @@ export class AdicionarContatoComponent implements OnInit {
     }, 10000);
   }
 
+  buscarCep(event: any) {
+    event.preventDefault();
+    this.cepService.buscarCep(this.novoContato['cep'])
+      .subscribe(
+        (data: Object) => {
+          this.endereco = data;
+          this.populateAddressFields();
+        },
+        (error) => {
+          console.error('Erro ao buscar CEP:', error);
+        }
+      );
+  }
+
+  populateAddressFields(): void {
+    this.novoContato.logradouro = this.endereco.logradouro;
+    this.novoContato.bairro = this.endereco.bairro;
+    this.novoContato.localidade = this.endereco.localidade;
+    this.novoContato.uf = this.endereco.uf;
+  }
 }

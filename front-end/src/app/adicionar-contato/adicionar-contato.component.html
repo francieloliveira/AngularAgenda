@@ -19,10 +19,15 @@
     <input [(ngModel)]="novoContato['dataNascimento']" type="date" id="dataNascimento" name="dataNascimento" placeholder="Data de Nascimento">
 
     <label for="cpf">CPF:</label>
-    <input [(ngModel)]="novoContato['cpf']" id="cpf" name="cpf" placeholder="CPF">
+    <input [(ngModel)]="novoContato['cpf']" id="cpf" type="text" name="cpf" placeholder="CPF">
 
     <label for="cnpj">CNPJ:</label>
     <input [(ngModel)]="novoContato['cnpj']" id="cnpj" name="cnpj" placeholder="CNPJ">
+
+    <label for="cep">CEP:</label>
+    <input [(ngModel)]="novoContato['cep']" id="cep" type="text" name="cep" placeholder="Digite o CEP">
+    <br/>
+    <button (click)="buscarCep($event)">Buscar</button>
 
     <label for="logradouro">Endereço:</label>
     <input [(ngModel)]="novoContato['logradouro']" id="logradouro" name="logradouro" placeholder="Logradouro">
@@ -41,6 +46,7 @@
 
     <label for="uf">UF:</label>
     <input [(ngModel)]="novoContato['uf']" id="uf" name="uf" placeholder="UF">
+
     <br/>
     <br/>
     <button type="submit">Salvar</button>

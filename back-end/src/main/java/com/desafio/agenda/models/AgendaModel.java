@@ -43,6 +43,9 @@ public class AgendaModel implements Serializable {
     @Column(name = "data_nascimento", nullable = false)
     private Date dataNascimento;
 
+    @Column(name = "cep")
+    private String cep;
+
     @Column(name = "logradouro")
     private String logradouro;
 
@@ -60,6 +63,8 @@ public class AgendaModel implements Serializable {
 
     @Column(name = "uf")
     private String uf;
+
+
 
     public UUID getId() {
         return id;
@@ -165,16 +170,21 @@ public class AgendaModel implements Serializable {
         this.uf = uf;
     }
 
+    public String getCep() {return cep;}
+
+    public void setCep(String cep) {this.cep = cep;}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AgendaModel that)) return false;
-        return Objects.equals(getId(), that.getId()) && Objects.equals(getNome(), that.getNome()) && Objects.equals(getCpf(), that.getCpf()) && Objects.equals(getCnpj(), that.getCnpj()) && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getTelefone(), that.getTelefone()) && Objects.equals(getDataNascimento(), that.getDataNascimento()) && Objects.equals(getLogradouro(), that.getLogradouro()) && Objects.equals(getNumero(), that.getNumero()) && Objects.equals(getComplemento(), that.getComplemento()) && Objects.equals(getBairro(), that.getBairro()) && Objects.equals(getLocalidade(), that.getLocalidade()) && Objects.equals(getUf(), that.getUf());
+        if (o == null || getClass() != o.getClass()) return false;
+        AgendaModel that = (AgendaModel) o;
+        return Objects.equals(id, that.id) && Objects.equals(nome, that.nome) && Objects.equals(cpf, that.cpf) && Objects.equals(cnpj, that.cnpj) && Objects.equals(email, that.email) && Objects.equals(telefone, that.telefone) && Objects.equals(dataNascimento, that.dataNascimento) && Objects.equals(cep, that.cep) && Objects.equals(logradouro, that.logradouro) && Objects.equals(numero, that.numero) && Objects.equals(complemento, that.complemento) && Objects.equals(bairro, that.bairro) && Objects.equals(localidade, that.localidade) && Objects.equals(uf, that.uf);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getNome(), getCpf(), getCnpj(), getEmail(), getTelefone(), getDataNascimento(), getLogradouro(), getNumero(), getComplemento(), getBairro(), getLocalidade(), getUf());
+        return Objects.hash(id, nome, cpf, cnpj, email, telefone, dataNascimento, cep, logradouro, numero, complemento, bairro, localidade, uf);
     }
 
     @Override
@@ -187,6 +197,7 @@ public class AgendaModel implements Serializable {
                 ", email='" + email + '\'' +
                 ", telefone='" + telefone + '\'' +
                 ", dataNascimento=" + dataNascimento +
+                ", cep=" + cep +
                 ", logradouro='" + logradouro + '\'' +
                 ", numero='" + numero + '\'' +
                 ", complemento='" + complemento + '\'' +

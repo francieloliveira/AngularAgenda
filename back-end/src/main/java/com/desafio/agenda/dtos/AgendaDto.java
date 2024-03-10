@@ -18,6 +18,7 @@ public class AgendaDto implements Serializable {
     private String email;
     private String telefone;
     private Date dataNascimento;
+    private String cep;
     private String logradouro;
     private String numero;
     private String complemento;
@@ -25,7 +26,7 @@ public class AgendaDto implements Serializable {
     private String localidade;
     private String uf;
 
-    public AgendaDto(UUID id, String nome, String cpf, String cnpj, String email, String telefone, Date dataNascimento, String logradouro, String numero, String complemento, String bairro, String localidade, String uf) {
+    public AgendaDto(UUID id, String nome, String cpf, String cnpj, String email, String telefone, Date dataNascimento, String cep, String logradouro, String numero, String complemento, String bairro, String localidade, String uf) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -33,6 +34,7 @@ public class AgendaDto implements Serializable {
         this.email = email;
         this.telefone = telefone;
         this.dataNascimento = dataNascimento;
+        this.cep = cep;
         this.logradouro = logradouro;
         this.numero = numero;
         this.complemento = complemento;
@@ -42,7 +44,6 @@ public class AgendaDto implements Serializable {
     }
 
     public AgendaDto() {
-
     }
 
     public UUID getId() {
@@ -149,16 +150,21 @@ public class AgendaDto implements Serializable {
         this.uf = uf;
     }
 
+    public String getCep() {return cep;}
+
+    public void setCep(String cep) {this.cep = cep;}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AgendaDto agendaDto)) return false;
-        return Objects.equals(getId(), agendaDto.getId()) && Objects.equals(getNome(), agendaDto.getNome()) && Objects.equals(getCpf(), agendaDto.getCpf()) && Objects.equals(getCnpj(), agendaDto.getCnpj()) && Objects.equals(getEmail(), agendaDto.getEmail()) && Objects.equals(getTelefone(), agendaDto.getTelefone()) && Objects.equals(getDataNascimento(), agendaDto.getDataNascimento()) && Objects.equals(getLogradouro(), agendaDto.getLogradouro()) && Objects.equals(getNumero(), agendaDto.getNumero()) && Objects.equals(getComplemento(), agendaDto.getComplemento()) && Objects.equals(getBairro(), agendaDto.getBairro()) && Objects.equals(getLocalidade(), agendaDto.getLocalidade()) && Objects.equals(getUf(), agendaDto.getUf());
+        if (o == null || getClass() != o.getClass()) return false;
+        AgendaDto agendaDto = (AgendaDto) o;
+        return Objects.equals(id, agendaDto.id) && Objects.equals(nome, agendaDto.nome) && Objects.equals(cpf, agendaDto.cpf) && Objects.equals(cnpj, agendaDto.cnpj) && Objects.equals(email, agendaDto.email) && Objects.equals(telefone, agendaDto.telefone) && Objects.equals(dataNascimento, agendaDto.dataNascimento) && Objects.equals(cep, agendaDto.cep) && Objects.equals(logradouro, agendaDto.logradouro) && Objects.equals(numero, agendaDto.numero) && Objects.equals(complemento, agendaDto.complemento) && Objects.equals(bairro, agendaDto.bairro) && Objects.equals(localidade, agendaDto.localidade) && Objects.equals(uf, agendaDto.uf);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getNome(), getCpf(), getCnpj(), getEmail(), getTelefone(), getDataNascimento(), getLogradouro(), getNumero(), getComplemento(), getBairro(), getLocalidade(), getUf());
+        return Objects.hash(id, nome, cpf, cnpj, email, telefone, dataNascimento, cep, logradouro, numero, complemento, bairro, localidade, uf);
     }
 
     @Override
@@ -171,6 +177,7 @@ public class AgendaDto implements Serializable {
                 ", email='" + email + '\'' +
                 ", telefone='" + telefone + '\'' +
                 ", dataNascimento=" + dataNascimento +
+                ", cep=" + cep +
                 ", logradouro='" + logradouro + '\'' +
                 ", numero='" + numero + '\'' +
                 ", complemento='" + complemento + '\'' +
