@@ -1,9 +1,15 @@
 <div *ngIf="contato">
-  <h2>Detalhes do Contato</h2>
 
-  <div *ngIf="mensagemAlerta" class="{{getTipoAlerta()}}">
-    {{ mensagemAlerta }}
+  <div *ngIf="notificationService.notifications$ | async as notifications">
+    <div *ngFor="let notification of notifications" class="{{ notification.type }}">
+      {{ notification.message }}
+      <button (click)="notificationService.hideNotification(notification.message)">X</button>
+    </div>
   </div>
+
+<!--  <app-notification *ngFor="let notification of notifications$ | async" [notification]="notification"></app-notification>-->
+
+  <h2>Detalhes do Contato</h2>
 
   <form>
     <label for="nome">Nome:</label>
@@ -16,13 +22,21 @@
     <input [(ngModel)]="contato['telefone']" type="tel" id="telefone" name="telefone" placeholder="Telefone">
 
     <label for="dataNascimento">Data de Nascimento:</label>
-    <input [(ngModel)]="contato['dataNascimento']" type="date" id="dataNascimento" name="dataNascimento" placeholder="Data de Nascimento">
+    <input [(ngModel)]="contato['dataNascimento']" type="date" id="dataNascimento" name="dataNascimento"
+           placeholder="Data de Nascimento">
 
     <label for="cpf">CPF:</label>
     <input [(ngModel)]="contato['cpf']" id="cpf" name="cpf" placeholder="CPF">
 
     <label for="cnpj">CNPJ:</label>
     <input [(ngModel)]="contato['cnpj']" id="cnpj" name="cnpj" placeholder="CNPJ">
+
+    <label for="cep">CEP:</label>
+    <input [(ngModel)]="contato['cep']" id="cep" type="text" name="cep" placeholder="Digite o CEP"
+           pattern="^\d{5}-\d{3}$">
+    <button (click)="buscarCep($event)">Buscar</button>
+    <br/>
+    <br/>
 
     <label for="logradouro">Endereço:</label>
     <input [(ngModel)]="contato['logradouro']" id="logradouro" name="logradouro" placeholder="Logradouro">

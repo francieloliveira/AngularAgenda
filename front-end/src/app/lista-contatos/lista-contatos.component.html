@@ -1,17 +1,23 @@
 <div>
+
+  <div *ngIf="notificationService.notifications$ | async as notifications">
+    <div *ngFor="let notification of notifications" class="{{ notification.type }}">
+      {{ notification.message }}
+      <button (click)="notificationService.hideNotification(notification.message)">X</button>
+    </div>
+  </div>
+
+<!--  <app-notification *ngFor="let notification of notifications$ | async" [notification]="notification"></app-notification>-->
+
+  <h2>Lista de Contatos</h2>
+
+  <div>
+    <label for="nomeBusca">Buscar por Nome:</label>
+    <input type="text" id="nomeBusca" [(ngModel)]="termoBusca"/>
+    <button (click)="buscarContatosPorNome()">Buscar</button>
+  </div>
+
   <div *ngIf="contatos && contatos.content && contatos.content.length > 0">
-    <h2>Lista de Contatos</h2>
-
-    <div *ngIf="mensagemAlerta" class="{{getTipoAlerta()}}">
-      {{ mensagemAlerta }}
-    </div>
-
-    <div>
-      <label for="nomeBusca">Buscar por Nome:</label>
-      <input type="text" id="nomeBusca" [(ngModel)]="termoBusca" />
-      <button (click)="buscarContatosPorNome()">Buscar</button>
-    </div>
-
     <ul>
       <li *ngFor="let contato of contatos.content">
         <div>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {AgendaService} from "../services/agenda.service";
 import {CepService} from "../services/cep.service";
+import {NotificationService} from "../services/notification.service";
 
 /**
  * Componente para adicionar um novo contato à agenda.
@@ -9,23 +10,27 @@ import {CepService} from "../services/cep.service";
 @Component({
   selector: 'app-adicionar-contato',
   templateUrl: './adicionar-contato.component.html',
-  styleUrls: ['./adicionar-contato.component.scss']
+  styleUrls: ['./adicionar-contato.component.scss'],
 })
 export class AdicionarContatoComponent implements OnInit {
   novoContato: any = {};
-  mensagemAlerta: string | null = null;
   cep: string = '';
   endereco: any;
+  notifications$: any;
 
   /**
    * Construtor da classe AdicionarContatoComponent.
    * @param agendaService
    * @param router
    * @param cepService
+   * @param notificationService
    */
   constructor(private agendaService: AgendaService,
               private router: Router,
-              private cepService: CepService) { }
+              private cepService: CepService,
+              public notificationService: NotificationService) {
+    this.notifications$ = notificationService.notifications$;
+  }
 
   /**
    * Método chamado quando o componente é inicializado.
@@ -40,39 +45,17 @@ export class AdicionarContatoComponent implements OnInit {
     this.agendaService.createContact(this.novoContato).subscribe(
       (response) => {
         if (response.id !== null) {
-          this.mensagemAlerta = "Contato Salvo com sucesso!";
+          console.log('Contato salvo com sucesso!');
+          this.notificationService.showNotification('Contato salvo com sucesso!', 'success');
         }
       },
       (error) => {
         console.error('Erro ao adicionar contato:', error);
-        this.mensagemAlerta = error.toString();
+        this.notificationService.showNotification('Erro: ' + error.message, 'error');
+
       }
     );
   }
-
-  /**
-   * Obtém o tipo de alerta com base na mensagem de alerta.
-   * @returns Tipo de alerta: 'success' para sucesso, 'danger' para erro.
-   */
-  getTipoAlerta(): string {
-    if (this.mensagemAlerta && this.mensagemAlerta.includes('sucesso')) {
-      this.hideAlertAfterTimeout();
-      return 'success';
-    } else {
-      this.hideAlertAfterTimeout();
-      return 'danger';
-    }
-  }
-
-  /**
-   * Oculta a mensagem de alerta após um período de tempo. (10000 milissegundos = 10 segundos)
-   */
-  hideAlertAfterTimeout(): void {
-    setTimeout(() => {
-      this.mensagemAlerta = null;
-    }, 10000);
-  }
-
   buscarCep(event: any) {
     event.preventDefault();
     this.cepService.buscarCep(this.novoContato['cep'])
@@ -93,4 +76,5 @@ export class AdicionarContatoComponent implements OnInit {
     this.novoContato.localidade = this.endereco.localidade;
     this.novoContato.uf = this.endereco.uf;
   }
+
 }

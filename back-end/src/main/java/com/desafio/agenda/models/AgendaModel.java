@@ -64,8 +64,6 @@ public class AgendaModel implements Serializable {
     @Column(name = "uf")
     private String uf;
 
-
-
     public UUID getId() {
         return id;
     }

@@ -1,0 +1,4 @@
+<div *ngIf="notification" class="{{ notification.type }}" id="notification">
+  {{ notification.message }}
+  <button (click)="hideNotification(notification.message)">X</button>
+</div>

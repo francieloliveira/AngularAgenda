@@ -1,10 +1,15 @@
 <div>
-    <h2>Adicionar Contato</h2>
 
-  <div *ngIf="mensagemAlerta" class="{{getTipoAlerta()}}">
-    {{ mensagemAlerta }}
-  </div>
+<!--  <div *ngIf="notificationService.notifications$ | async as notifications">-->
+<!--    <div *ngFor="let notification of notifications" class="{{ notification.type }}">-->
+<!--      {{ notification.message }}-->
+<!--      <button (click)="notificationService.hideNotification(notification.message)">X</button>-->
+<!--    </div>-->
+<!--  </div>-->
 
+  <app-notification *ngFor="let notification of notifications$ | async" [notification]="notification"></app-notification>
+
+  <h2>Adicionar Contato</h2>
   <form (ngSubmit)="adicionarContato()" #contatoForm="ngForm">
     <label for="nome">Nome:</label>
     <input [(ngModel)]="novoContato['nome']" id="nome" name="nome" placeholder="Nome">
@@ -13,21 +18,27 @@
     <input [(ngModel)]="novoContato.email" type="email" id="email" name="email" placeholder="Email">
 
     <label for="telefone">Telefone:</label>
-    <input [(ngModel)]="novoContato['telefone']" type="tel" id="telefone" name="telefone" placeholder="Telefone">
+    <input [(ngModel)]="novoContato['telefone']" type="tel" id="telefone" name="telefone" placeholder="Telefone"
+           pattern="^\(\d{2}\)\s\d{4}-\d{4}$">
 
     <label for="dataNascimento">Data de Nascimento:</label>
-    <input [(ngModel)]="novoContato['dataNascimento']" type="date" id="dataNascimento" name="dataNascimento" placeholder="Data de Nascimento">
+    <input [(ngModel)]="novoContato['dataNascimento']" type="date" id="dataNascimento" name="dataNascimento"
+           placeholder="Data de Nascimento">
 
     <label for="cpf">CPF:</label>
-    <input [(ngModel)]="novoContato['cpf']" id="cpf" type="text" name="cpf" placeholder="CPF">
+    <input [(ngModel)]="novoContato['cpf']" id="cpf" type="text" name="cpf" placeholder="CPF"
+           pattern="^(\d{3}\.){2}\d{3}-\d{2}$">
 
     <label for="cnpj">CNPJ:</label>
-    <input [(ngModel)]="novoContato['cnpj']" id="cnpj" name="cnpj" placeholder="CNPJ">
+    <input [(ngModel)]="novoContato['cnpj']" id="cnpj" name="cnpj" placeholder="CNPJ"
+           pattern="^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$">
 
     <label for="cep">CEP:</label>
-    <input [(ngModel)]="novoContato['cep']" id="cep" type="text" name="cep" placeholder="Digite o CEP">
-    <br/>
+    <input [(ngModel)]="novoContato['cep']" id="cep" type="text" name="cep" placeholder="Digite o CEP"
+           pattern="^\d{5}-\d{3}$">
     <button (click)="buscarCep($event)">Buscar</button>
+    <br/>
+    <br/>
 
     <label for="logradouro">Endereço:</label>
     <input [(ngModel)]="novoContato['logradouro']" id="logradouro" name="logradouro" placeholder="Logradouro">

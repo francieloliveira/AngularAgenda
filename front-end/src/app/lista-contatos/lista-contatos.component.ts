@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AgendaService } from '../services/agenda.service';
 import {PaginaContatos} from "./pagina-contatos";
+import {NotificationService} from "../services/notification.service";
 
 /**
  * Componente para exibir a lista de contatos, carregar contatos por página e buscar contatos por nome.
@@ -12,14 +13,15 @@ import {PaginaContatos} from "./pagina-contatos";
 })
 export class ListaContatosComponent implements OnInit {
   contatos: any = [];
-  mensagemAlerta: string | null = null;
   termoBusca: string = '';
 
   /**
    * Construtor da classe ListaContatosComponent.
    * @param agendaService Serviço para interação com a agenda.
+   * @param notificationService
    */
-  constructor(private agendaService: AgendaService) { }
+  constructor(private agendaService: AgendaService,
+              public notificationService: NotificationService) { }
 
   /**
    * Método chamado quando o componente é inicializado.
@@ -35,10 +37,11 @@ export class ListaContatosComponent implements OnInit {
     this.agendaService.getContacts(1, tamanhoPagina).subscribe(
       (contatos: Object) => {
         this.contatos = contatos;
+        console.log('Contatos listados com sucesso!');
       },
       (error) => {
-        console.error('Erro ao adicionar contato:', error);
-        this.mensagemAlerta = error.toString();
+        console.error('Erro ao listar contatos:', error);
+        this.notificationService.showNotification('Erro: ' + error.message, 'error');
       }
     );
   }
@@ -51,10 +54,11 @@ export class ListaContatosComponent implements OnInit {
     this.agendaService.getContactsByPage(numeroPagina, 10).subscribe(
       (paginaContatos: PaginaContatos) => {
         this.contatos = paginaContatos;
+        console.log('Contatos listados (por pag.) com sucesso!');
       },
       (error: any) => {
-        console.error(error);
-        this.mensagemAlerta = error.toString();
+        console.error('Erro ao listar contatos (por pag.):', error);
+        this.notificationService.showNotification('Erro: ' + error.message, 'error');
       }
     );
   }
@@ -66,35 +70,13 @@ export class ListaContatosComponent implements OnInit {
     this.agendaService.searchContactsByName(this.termoBusca).subscribe(
       (contatos: Object) => {
         this.contatos = contatos;
+        console.log('Busca realizada com sucesso!');
       },
       (error) => {
         console.error('Erro ao buscar contatos por nome:', error);
-        this.mensagemAlerta = error.toString();
+        this.notificationService.showNotification('Erro: ' + error.message, 'error');
       }
     );
-  }
-
-  /**
-   * Obtém o tipo de alerta com base na mensagem de alerta.
-   * @returns Tipo de alerta: 'success' para sucesso, 'danger' para erro.
-   */
-  getTipoAlerta(): string {
-    if (this.mensagemAlerta && this.mensagemAlerta.includes('sucesso')) {
-      this.hideAlertAfterTimeout();
-      return 'success';
-    } else {
-      this.hideAlertAfterTimeout();
-      return 'danger';
-    }
-  }
-
-  /**
-   * Oculta a mensagem de alerta após um período de tempo. (10000 milissegundos = 10 segundos)
-   */
-  hideAlertAfterTimeout(): void {
-    setTimeout(() => {
-      this.mensagemAlerta = null;
-    }, 10000);
   }
 
 }
