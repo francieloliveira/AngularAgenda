@@ -117,7 +117,7 @@ export class AgendaService {
     } else {
       errorMessage = error.error || `Code: ${error.status}, Message: ${error.message}`;
     }
-    console.error(errorMessage);
+    // console.error(errorMessage);
     return throwError(errorMessage);
   }
 

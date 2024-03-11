@@ -15,6 +15,7 @@ import {NotificationService} from "../services/notification.service";
 export class DetalhesContatoComponent implements OnInit {
   contato: any = [];
   endereco: any;
+  notifications$: any;
 
   /**
    * Construtor da classe DetalhesContatoComponent.
@@ -29,6 +30,7 @@ export class DetalhesContatoComponent implements OnInit {
               private router: Router,
               private cepService: CepService,
               public notificationService: NotificationService) {
+    this.notifications$ = notificationService.notifications$;
   }
 
   /**
@@ -64,8 +66,8 @@ export class DetalhesContatoComponent implements OnInit {
             this.notificationService.showNotification('Contato atualizado com sucesso!', 'success');
         },
         (error) => {
-          console.error('Erro ao salvar contato:', error);
-          this.notificationService.showNotification('Erro: ' + error.message, 'error');
+          console.error('Erro:', error);
+          this.notificationService.showNotification('Erro: ' + error, 'error');
         }
       );
     }
@@ -85,8 +87,8 @@ export class DetalhesContatoComponent implements OnInit {
           }
         },
         (error) => {
-          console.error('Erro ao excluir contato:', error);
-          this.notificationService.showNotification('Erro: ' + error.message, 'error');
+          console.error('Erro:', error);
+          this.notificationService.showNotification('Erro: ' + error, 'error');
         }
       );
     }
@@ -102,6 +104,7 @@ export class DetalhesContatoComponent implements OnInit {
         },
         (error) => {
           console.error('Erro ao buscar CEP:', error);
+          this.notificationService.showNotification('Erro:' + error, 'error');
         }
       );
   }

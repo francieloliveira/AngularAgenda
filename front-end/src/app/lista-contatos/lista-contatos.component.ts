@@ -14,6 +14,8 @@ import {NotificationService} from "../services/notification.service";
 export class ListaContatosComponent implements OnInit {
   contatos: any = [];
   termoBusca: string = '';
+  notifications$: any;
+
 
   /**
    * Construtor da classe ListaContatosComponent.
@@ -21,7 +23,9 @@ export class ListaContatosComponent implements OnInit {
    * @param notificationService
    */
   constructor(private agendaService: AgendaService,
-              public notificationService: NotificationService) { }
+              public notificationService: NotificationService) {
+    this.notifications$ = notificationService.notifications$;
+  }
 
   /**
    * Método chamado quando o componente é inicializado.
@@ -40,8 +44,8 @@ export class ListaContatosComponent implements OnInit {
         console.log('Contatos listados com sucesso!');
       },
       (error) => {
-        console.error('Erro ao listar contatos:', error);
-        this.notificationService.showNotification('Erro: ' + error.message, 'error');
+        console.error('Erro:', error);
+        this.notificationService.showNotification('Erro: ' + error, 'error');
       }
     );
   }
@@ -57,8 +61,8 @@ export class ListaContatosComponent implements OnInit {
         console.log('Contatos listados (por pag.) com sucesso!');
       },
       (error: any) => {
-        console.error('Erro ao listar contatos (por pag.):', error);
-        this.notificationService.showNotification('Erro: ' + error.message, 'error');
+        console.error('Erro:', error);
+        this.notificationService.showNotification('Erro: ' + error, 'error');
       }
     );
   }
@@ -72,9 +76,9 @@ export class ListaContatosComponent implements OnInit {
         this.contatos = contatos;
         console.log('Busca realizada com sucesso!');
       },
-      (error) => {
+      (error) => { //TODO Tratar de forma diferente o retorno
         console.error('Erro ao buscar contatos por nome:', error);
-        this.notificationService.showNotification('Erro: ' + error.message, 'error');
+        this.notificationService.showNotification('Erro: ' + error, 'error');
       }
     );
   }

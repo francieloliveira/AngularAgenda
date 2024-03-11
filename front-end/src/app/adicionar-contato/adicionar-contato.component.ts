@@ -50,12 +50,12 @@ export class AdicionarContatoComponent implements OnInit {
         }
       },
       (error) => {
-        console.error('Erro ao adicionar contato:', error);
-        this.notificationService.showNotification('Erro: ' + error.message, 'error');
-
+        console.error('Erro:', error);
+        this.notificationService.showNotification('Erro: ' + error, 'error');
       }
     );
   }
+
   buscarCep(event: any) {
     event.preventDefault();
     this.cepService.buscarCep(this.novoContato['cep'])
@@ -66,6 +66,7 @@ export class AdicionarContatoComponent implements OnInit {
         },
         (error) => {
           console.error('Erro ao buscar CEP:', error);
+          this.notificationService.showNotification('Erro:' + error, 'error');
         }
       );
   }

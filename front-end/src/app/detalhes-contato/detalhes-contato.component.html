@@ -1,13 +1,6 @@
 <div *ngIf="contato">
 
-  <div *ngIf="notificationService.notifications$ | async as notifications">
-    <div *ngFor="let notification of notifications" class="{{ notification.type }}">
-      {{ notification.message }}
-      <button (click)="notificationService.hideNotification(notification.message)">X</button>
-    </div>
-  </div>
-
-<!--  <app-notification *ngFor="let notification of notifications$ | async" [notification]="notification"></app-notification>-->
+  <app-notification *ngFor="let notification of notifications$ | async" [notification]="notification"></app-notification>
 
   <h2>Detalhes do Contato</h2>
 
