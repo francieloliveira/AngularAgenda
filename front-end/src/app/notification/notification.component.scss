@@ -8,6 +8,7 @@
   padding: 10px;
   max-width: 300px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: visibility 0s, opacity 0.5s linear; //não funcionou
 }
 
 .success {

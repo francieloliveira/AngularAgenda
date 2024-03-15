@@ -2,6 +2,12 @@ package com.desafio.agenda.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.io.Serial;
@@ -22,24 +28,29 @@ public class AgendaModel implements Serializable {
     private UUID id;
 
     @NotNull
+    @NotBlank(message = "O campo nome é obrigatório")
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @CPF
+    @NotBlank(message = "O campo CPF é obrigatório")
+    @CPF(message = "CPF Inválido")
     @Column(name = "cpf", unique = true)
     private String cpf;
 
-    @Column(name = "cnpj", unique = true)
+    @Column(name = "cnpj")
     private String cnpj;
 
-    @Column(name = "email")
+    @NotBlank(message = "O campo email é obrigatório")
+    @Email(message = "Email inválido")
+    @Column(name = "email", unique = true)
     private String email;
 
-//    @Pattern(regexp = "\\(\\d{2}\\) \\d{4}-\\d{4}")
+//    @Pattern(regexp = "^\\([0-9]{2}\\)\\s?[0-9]{4}-[0-9]{4}$", message = "Telefone inválido")
     @Column(name = "telefone")
     private String telefone;
 
     @Temporal(TemporalType.DATE)
+    @NotNull(message = "A data de nascimento é obrigatória")
     @Column(name = "data_nascimento", nullable = false)
     private Date dataNascimento;
 

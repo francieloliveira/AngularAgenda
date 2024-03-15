@@ -3,13 +3,16 @@ package com.desafio.agenda.controllers;
 import com.desafio.agenda.dtos.AgendaDto;
 import com.desafio.agenda.services.AgendaService;
 import com.desafio.agenda.services.EmailNotificationService;
-import com.desafio.agenda.utils.ValidatorCpfCnpj;
+import jakarta.persistence.RollbackException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import com.desafio.agenda.models.AgendaModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,10 +20,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -44,43 +47,43 @@ public class AgendaController {
     @PostMapping
     public ResponseEntity<Object> createContact(@RequestBody @Valid AgendaDto agendaDto) {
         try {
-            if (agendaDto.getCpf() == null && agendaDto.getCnpj() == null) {
-                return ResponseEntity.badRequest().body("CPF ou CNPJ é obrigatório");
+            // Validação de campos obrigatórios
+            if (agendaDto.getCpf() == null) {
+                return ResponseEntity.badRequest().body("CPF é obrigatório!");
             }
-
-            // Validação de CPF
-            if (agendaDto.getCpf() != null) {
-                if (agendaService.existsByCpf(agendaDto.getCpf())) {
-                    if (!ValidatorCpfCnpj.isValidCPF(agendaDto.getCpf())) {
-                        return ResponseEntity.badRequest().body("CPF inválido");
-                    }
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body("O CPF já existe");
-                }
-            }
-
-            // Validação de CNPJ
-            if (agendaDto.getCnpj() != null) {
-                if (agendaService.existsByCnpj(agendaDto.getCnpj())) {
-                    if (!ValidatorCpfCnpj.isValidCNPJ(agendaDto.getCnpj())) {
-                        return ResponseEntity.badRequest().body("CNPJ inválido");
-                    }
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body("O CNPJ já existe");
-                }
-            }
-
-            // Validação da Data de Nascimento
             if (agendaDto.getDataNascimento() == null) {
-                return ResponseEntity.badRequest().body("Data de nascimento é obrigatória");
+                return ResponseEntity.badRequest().body("Data de nascimento é obrigatória!");
             }
 
+            // Conversão do DTO para o modelo
             var agendaModel = new AgendaModel();
             BeanUtils.copyProperties(agendaDto, agendaModel);
 
-            // Envio de e-mail
+            // Salvar o contato e enviar notificação por e-mail
             AgendaModel savedContact = agendaService.save(agendaModel);
             emailNotificationService.sendEmailNotification(savedContact);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedContact);
 
+        } catch (TransactionSystemException tse) {
+            if (tse.getCause() instanceof RollbackException) {
+                ConstraintViolationException cve = (ConstraintViolationException) tse.getCause().getCause();
+                List<String> messages = new ArrayList<>();
+                for (ConstraintViolation<?> violation : cve.getConstraintViolations()) {
+                    messages.add(violation.getMessage());
+                }
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messages);
+            } else {
+                tse.getCause().printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Transaction system error");
+            }
+        } catch (DataIntegrityViolationException e) {
+            if (e.getMessage().contains("cpf")) {
+                logger.error("CPF já existe", e);
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("CPF já existe");
+            } else {
+                logger.error("Erro inesperado ao salvar contato", e);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar contato");
+            }
         } catch (Exception e) {
             logger.error("Erro inesperado ao salvar contato", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar contato");

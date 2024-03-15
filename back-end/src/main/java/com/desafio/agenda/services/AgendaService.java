@@ -19,9 +19,7 @@ public class AgendaService {
     private AgendaRepository agendaRepository;
 
     @Transactional
-    public AgendaModel save(AgendaModel agendaModel) {
-        return agendaRepository.save(agendaModel);
-    }
+    public AgendaModel save(AgendaModel agendaModel) {return agendaRepository.save(agendaModel);}
     @Transactional
     public void deleteItem(AgendaModel agendaModel) {
         agendaRepository.delete(agendaModel);
