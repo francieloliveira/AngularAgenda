@@ -6,6 +6,7 @@ import {AdicionarContatoComponent} from "../adicionar-contato/adicionar-contato.
 import {FormsModule} from "@angular/forms";
 import {AppRoutingModule} from "../app-routing.module";
 import {NotificationComponent} from "../notification/notification.component";
+import {NgxMaskModule} from "ngx-mask";
 
 @NgModule({
   declarations: [
@@ -14,10 +15,11 @@ import {NotificationComponent} from "../notification/notification.component";
     AdicionarContatoComponent,
     NotificationComponent
   ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    AppRoutingModule
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        AppRoutingModule,
+        NgxMaskModule
+    ]
 })
 export class ContatosModule { }

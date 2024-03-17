@@ -12,7 +12,7 @@
 
     <label for="telefone">Telefone:</label>
     <input [(ngModel)]="novoContato['telefone']" type="tel" id="telefone" name="telefone" placeholder="Telefone"
-           pattern="^\(\d{2}\)\s\d{4}-\d{4}$">
+           mask="(00) 0000-00000">
 
     <label for="dataNascimento">Data de Nascimento:</label>
     <input [(ngModel)]="novoContato['dataNascimento']" type="date" id="dataNascimento" name="dataNascimento"
@@ -20,15 +20,15 @@
 
     <label for="cpf">CPF:</label>
     <input [(ngModel)]="novoContato['cpf']" id="cpf" type="text" name="cpf" placeholder="CPF"
-           pattern="^(\d{3}\.){2}\d{3}-\d{2}$">
+           mask="000.000.000-00" >
 
     <label for="cnpj">CNPJ:</label>
     <input [(ngModel)]="novoContato['cnpj']" id="cnpj" name="cnpj" placeholder="CNPJ"
-           pattern="^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$">
+           mask="00.000.000/0000-00">
 
     <label for="cep">CEP:</label>
     <input [(ngModel)]="novoContato['cep']" id="cep" type="text" name="cep" placeholder="Digite o CEP"
-           pattern="^\d{5}-\d{3}$">
+           mask="00000-000">
     <button (click)="buscarCep($event)">Buscar</button>
     <br/>
     <br/>

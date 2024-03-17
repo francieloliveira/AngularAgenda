@@ -5,7 +5,9 @@ import { AppComponent } from './app.component';
 import { ContatosModule } from './contatos/contatos.module';
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
+import { NgxMaskModule, IConfig } from 'ngx-mask'
 
+export const options: Partial<null|IConfig> | (() => Partial<IConfig>) = null;
 
 @NgModule({
   declarations: [
@@ -16,7 +18,8 @@ import {HttpClientModule} from "@angular/common/http";
     AppRoutingModule,
     ContatosModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxMaskModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

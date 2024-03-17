@@ -12,21 +12,24 @@
     <input [(ngModel)]="contato.email" type="email" id="email" name="email" placeholder="Email">
 
     <label for="telefone">Telefone:</label>
-    <input [(ngModel)]="contato['telefone']" type="tel" id="telefone" name="telefone" placeholder="Telefone">
+    <input [(ngModel)]="contato['telefone']" type="tel" id="telefone" name="telefone" placeholder="Telefone"
+           mask="(00) 0000-00000">
 
     <label for="dataNascimento">Data de Nascimento:</label>
     <input [(ngModel)]="contato['dataNascimento']" type="date" id="dataNascimento" name="dataNascimento"
            placeholder="Data de Nascimento">
 
     <label for="cpf">CPF:</label>
-    <input [(ngModel)]="contato['cpf']" id="cpf" name="cpf" placeholder="CPF">
+    <input [(ngModel)]="contato['cpf']" id="cpf" name="cpf" placeholder="CPF"
+           mask="000.000.000-00" >
 
     <label for="cnpj">CNPJ:</label>
-    <input [(ngModel)]="contato['cnpj']" id="cnpj" name="cnpj" placeholder="CNPJ">
+    <input [(ngModel)]="contato['cnpj']" id="cnpj" name="cnpj" placeholder="CNPJ"
+           mask="00.000.000/0000-00">
 
     <label for="cep">CEP:</label>
     <input [(ngModel)]="contato['cep']" id="cep" type="text" name="cep" placeholder="Digite o CEP"
-           pattern="^\d{5}-\d{3}$">
+           mask="00000-000">
     <button (click)="buscarCep($event)">Buscar</button>
     <br/>
     <br/>
